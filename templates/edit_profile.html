@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - Sonu's Survey{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="card-header bg-primary text-white py-4">
+                <h3 class="mb-0">Edit Your Profile</h3>
+                <p class="text-white-50 mb-0">Update your personal information</p>
+            </div>
+            <div class="card-body p-5">
+                <div class="row mb-4">
+                    <div class="col-md-3 text-center mb-4 mb-md-0">
+                        <div class="avatar-circle mb-3">
+                            <span class="avatar-text">{{ current_user.username|first|upper }}</span>
+                        </div>
+                        <h5 class="fw-bold">{{ current_user.username }}</h5>
+                        <p class="text-muted small mb-0">Member since {{ current_user.created_at.strftime('%b %d, %Y') if current_user.created_at else 'N/A' }}</p>
+                    </div>
+                    <div class="col-md-9">
+                        <form method="POST" action="{{ url_for('auth.edit_profile') }}">
+                            <div class="mb-4">
+                                <label for="username" class="form-label">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-user text-muted"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0" id="username" name="username" value="{{ current_user.username }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-envelope text-muted"></i>
+                                    </span>
+                                    <input type="email" class="form-control border-start-0" id="email" name="email" value="{{ current_user.email }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="current_password" class="form-label">Current Password <span class="text-muted">(required to save changes)</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-lock text-muted"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0" id="current_password" name="current_password" placeholder="Enter your current password" required>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            <h5 class="mb-3">Change Password <span class="text-muted small">(optional)</span></h5>
+                            
+                            <div class="mb-4">
+                                <label for="new_password" class="form-label">New Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-key text-muted"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0" id="new_password" name="new_password" placeholder="Leave blank to keep current password">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-key text-muted"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0" id="confirm_password" name="confirm_password" placeholder="Confirm new password">
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+                                <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 500;
+    margin: 0 auto;
+}
+.avatar-text {
+    line-height: 1;
+}
+</style>
+{% endblock %}

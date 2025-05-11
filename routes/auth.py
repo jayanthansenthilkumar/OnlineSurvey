@@ -84,3 +84,62 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@auth_bp.route('/profile/edit', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        # Validate data
+        if not username or not email or not current_password:
+            flash('Username, email, and current password are required', 'error')
+            return render_template('edit_profile.html')
+        
+        # Verify current password
+        if not current_user.check_password(current_password):
+            flash('Current password is incorrect', 'error')
+            return render_template('edit_profile.html')
+        
+        mongo = current_app.mongo
+          # If username or email has changed, check if it already exists
+        if username != current_user.username or email != current_user.email:
+            existing_user = mongo.db.users.find_one({
+                '$and': [
+                    {'_id': {'$ne': current_user._id}},
+                    {'$or': [{'username': username}, {'email': email}]}
+                ]
+            })
+            
+            if existing_user:
+                flash('Username or Email already exists', 'error')
+                return render_template('edit_profile.html')
+        
+        # Update user data
+        update_data = {
+            'username': username,
+            'email': email
+        }
+        
+        # If new password is provided, update it
+        if new_password:
+            if not confirm_password:
+                flash('Please confirm your new password', 'error')
+                return render_template('edit_profile.html')
+            
+            if new_password != confirm_password:
+                flash('New passwords do not match', 'error')
+                return render_template('edit_profile.html')
+            
+            # Update password hash
+            update_data['password_hash'] = generate_password_hash(new_password)
+          # Update user in database
+        mongo.db.users.update_one({'_id': current_user._id}, {'$set': update_data})
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('survey.dashboard'))
+    
+    return render_template('edit_profile.html')

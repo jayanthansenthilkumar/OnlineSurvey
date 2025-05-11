@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}SurveyPulse - Modern Survey Platform{% endblock %}
+{% block title %}Sonu's Survey - Modern Survey Platform{% endblock %}
 
 {% block content %}
 <div class="hero-section text-center">
     <div class="container">
         <h1 class="display-4 fw-bold mb-4">Create Surveys That Get Results</h1>
-        <p class="lead mb-5">SurveyPulse helps you create beautiful surveys, collect valuable feedback, and make data-driven decisions.</p>
+        <p class="lead mb-5">Sonu's Survey helps you create beautiful surveys, collect valuable feedback, and make data-driven decisions.</p>
         <div class="d-grid gap-3 d-md-flex justify-content-md-center">
             {% if current_user.is_authenticated %}
                 <a href="{{ url_for('survey.dashboard') }}" class="btn btn-light btn-lg px-5">
