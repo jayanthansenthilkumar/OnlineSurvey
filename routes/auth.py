@@ -55,20 +55,19 @@ def login():
         return redirect(url_for('index'))
     
     if request.method == 'POST':
-        email = request.form.get('email')
+        username = request.form.get('username')
         password = request.form.get('password')
         
-        if not email or not password:
-            flash('Email and password are required', 'error')
+        if not username or not password:
+            flash('Username and password are required', 'error')
             return render_template('login.html')
         
         mongo = current_app.mongo
-        user_data = mongo.db.users.find_one({'email': email})
+        user_data = mongo.db.users.find_one({'username': username})
         
         if not user_data:
-            flash('Invalid email or password', 'error')
+            flash('Invalid username or password', 'error')
             return render_template('login.html')
-        
         user = User.from_mongo(user_data)
         
         if user and user.check_password(password):
@@ -76,7 +75,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page or url_for('survey.dashboard'))
         else:
-            flash('Invalid email or password', 'error')
+            flash('Invalid username or password', 'error')
     
     return render_template('login.html')
 
