@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ survey.title }} - Online Survey System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">{{ survey.title }}</h1>
+        <p class="mt-2 text-muted">{{ survey.description }}</p>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Survey Questions</h6>
+    </div>
+    <div class="card-body">
+        <form id="take-survey-form" method="POST" action="{{ url_for('survey.take_survey', survey_id=survey._id) }}">
+            {% for question in survey.questions %}
+                <div class="survey-item mb-4">
+                    <div class="survey-question">
+                        <strong>{{ loop.index }}. {{ question.text }}</strong>
+                    </div>
+                    
+                    {% if question.type == 'multiple_choice' %}
+                        <div class="survey-options">
+                            {% for option in question.options %}
+                                <div class="form-check survey-option">
+                                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_{{ question.id }}_{{ loop.index }}" value="{{ option }}" required>
+                                    <label class="form-check-label" for="option_{{ question.id }}_{{ loop.index }}">
+                                        {{ option }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% elif question.type == 'checkbox' %}
+                        <div class="survey-options">
+                            {% for option in question.options %}
+                                <div class="form-check survey-option">
+                                    <input class="form-check-input" type="checkbox" name="question_{{ question.id }}" id="option_{{ question.id }}_{{ loop.index }}" value="{{ option }}">
+                                    <label class="form-check-label" for="option_{{ question.id }}_{{ loop.index }}">
+                                        {{ option }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% elif question.type == 'text' %}
+                        <div class="form-group">
+                            <textarea class="form-control" name="question_{{ question.id }}" rows="3" required></textarea>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div class="text-end mt-4">
+                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Submit Survey
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

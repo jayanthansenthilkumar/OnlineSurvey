@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}Survey Results - {{ survey.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1 class="h3 mb-0 text-gray-800">Results: {{ survey.title }}</h1>
+        <p class="mt-2 text-muted">{{ survey.description }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('survey.dashboard') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Survey Statistics</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Responses</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_responses }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Status</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {% if survey.is_active %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactive</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Created</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ survey.created_at.strftime('%Y-%m-%d') }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for question_id, result in results.items() %}
+    <div class="card shadow mb-4 result-section">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">{{ loop.index }}. {{ result.text }}</h6>
+            <small class="text-muted">
+                {% if result.type == 'multiple_choice' %}Multiple Choice Question
+                {% elif result.type == 'checkbox' %}Checkbox Question
+                {% else %}Text Question
+                {% endif %}
+            </small>
+        </div>
+        <div class="card-body">
+            {% if result.type in ['multiple_choice', 'checkbox'] %}
+                <div class="result-chart">
+                    <canvas id="chart-{{ question_id }}" width="400" height="200"></canvas>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for option in result.options %}
+                                <tr>
+                                    <td>{{ option }}</td>
+                                    <td>{{ result.counts[option] }}</td>
+                                    <td>
+                                        {% if total_responses > 0 %}
+                                            {{ ((result.counts[option] / total_responses) * 100) | round(1) }}%
+                                        {% else %}
+                                            0%
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <h6 class="mb-3">Text Responses</h6>
+                {% if result.answers|length > 0 %}
+                    {% for answer in result.answers %}
+                        <div class="text-response">{{ answer }}</div>
+                    {% endfor %}
+                {% else %}
+                    <p>No responses yet.</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        {% for question_id, result in results.items() %}
+            {% if result.type in ['multiple_choice', 'checkbox'] %}
+                // Set up chart for question {{ question_id }}
+                var ctx = document.getElementById('chart-{{ question_id }}').getContext('2d');
+                var chartData = {
+                    labels: [
+                        {% for option in result.options %}
+                            "{{ option }}",
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '# of Responses',
+                        data: [
+                            {% for option in result.options %}
+                                {{ result.counts[option] }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: [
+                            'rgba(78, 115, 223, 0.7)',
+                            'rgba(54, 185, 204, 0.7)',
+                            'rgba(28, 200, 138, 0.7)',
+                            'rgba(246, 194, 62, 0.7)',
+                            'rgba(231, 74, 59, 0.7)',
+                            'rgba(133, 135, 150, 0.7)',
+                        ],
+                        borderColor: [
+                            'rgba(78, 115, 223, 1)',
+                            'rgba(54, 185, 204, 1)',
+                            'rgba(28, 200, 138, 1)',
+                            'rgba(246, 194, 62, 1)',
+                            'rgba(231, 74, 59, 1)',
+                            'rgba(133, 135, 150, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+                
+                var chartType = '{{ result.type }}' === 'multiple_choice' ? 'pie' : 'bar';
+                
+                var myChart = new Chart(ctx, {
+                    type: chartType,
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: chartType === 'pie' ? 'right' : 'top',
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                display: chartType === 'bar'
+                            }
+                        }
+                    }
+                });
+            {% endif %}
+        {% endfor %}
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Survey - Online Survey System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">Edit Survey</h1>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Survey Details</h6>
+    </div>
+    <div class="card-body">
+        <form id="edit-survey-form" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Survey Title</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ survey.title }}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Survey Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required>{{ survey.description }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {% if survey.is_active %}checked{% endif %}>
+                    <label class="form-check-label" for="is_active">
+                        Active Survey
+                    </label>
+                </div>
+                <small class="form-text text-muted">Inactive surveys won't be available for users to take.</small>
+            </div>
+            
+            <div class="mb-3">
+                <label for="end_date" class="form-label">End Date (Optional)</label>
+                <input type="text" class="form-control" id="end_date" name="end_date" value="{{ end_date }}" placeholder="Select end date...">
+                <small class="form-text text-muted">If set, the survey will automatically become inactive after this date.</small>
+            </div>
+            
+            <hr class="my-4">
+            
+            <h5 class="mb-3">Survey Questions</h5>
+            
+            <div id="questions-container">
+                <!-- Questions will be loaded here dynamically -->
+            </div>
+            
+            <div class="mb-3">
+                <button type="button" id="add-multiple-choice" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-plus"></i> Add Multiple Choice
+                </button>
+                <button type="button" id="add-checkbox" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-plus"></i> Add Checkbox
+                </button>
+                <button type="button" id="add-text" class="btn btn-outline-primary">
+                    <i class="fas fa-plus"></i> Add Text Question
+                </button>
+            </div>
+            
+            <input type="hidden" id="questions_json" name="questions_json" value='{{ survey.questions|tojson }}'>
+            
+            <div class="text-end mt-4">
+                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" id="submit-button" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update Survey
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Question Templates (Hidden) -->
+<div class="d-none">
+    <!-- Multiple Choice Question Template -->
+    <div id="multiple-choice-template" class="question-card">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+            <h6 class="question-type fw-bold">
+                <i class="fas fa-dot-circle text-primary"></i> Multiple Choice Question
+            </h6>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-question">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Question Text</label>
+            <input type="text" class="form-control question-text" placeholder="Enter your question here...">
+        </div>
+        <div class="options-container mb-3">
+            <!-- Options will be added here -->
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary add-option">
+            <i class="fas fa-plus"></i> Add Option
+        </button>
+    </div>
+    
+    <!-- Checkbox Question Template -->
+    <div id="checkbox-template" class="question-card">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+            <h6 class="question-type fw-bold">
+                <i class="fas fa-check-square text-primary"></i> Checkbox Question
+            </h6>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-question">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Question Text</label>
+            <input type="text" class="form-control question-text" placeholder="Enter your question here...">
+        </div>
+        <div class="options-container mb-3">
+            <!-- Options will be added here -->
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary add-option">
+            <i class="fas fa-plus"></i> Add Option
+        </button>
+    </div>
+    
+    <!-- Text Question Template -->
+    <div id="text-template" class="question-card">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+            <h6 class="question-type fw-bold">
+                <i class="fas fa-font text-primary"></i> Text Question
+            </h6>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-question">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Question Text</label>
+            <input type="text" class="form-control question-text" placeholder="Enter your question here...">
+        </div>
+    </div>
+    
+    <!-- Option Template -->
+    <div id="option-template" class="input-group mb-2 option-input">
+        <input type="text" class="form-control option-text" placeholder="Option text...">
+        <button class="btn btn-outline-danger remove-option" type="button">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ url_for('static', filename='js/survey.js') }}"></script>
+<script>
+    // This script runs when the page loads to populate questions from existing survey
+    document.addEventListener('DOMContentLoaded', function() {
+        const questionsContainer = document.getElementById('questions-container');
+        const questionsJson = document.getElementById('questions_json').value;
+        
+        // Load existing questions
+        if (questionsJson) {
+            try {
+                const questions = JSON.parse(questionsJson);
+                
+                // Clear any existing questions
+                questionsContainer.innerHTML = '';
+                
+                // Add each question
+                questions.forEach(question => {
+                    loadQuestion(question);
+                });
+                
+                // Update the submit button status
+                updateSubmitButtonState();
+            } catch (e) {
+                console.error("Error parsing questions JSON:", e);
+            }
+        }
+        
+        function loadQuestion(question) {
+            let template;
+            
+            switch (question.type) {
+                case 'multiple_choice':
+                    template = document.getElementById('multiple-choice-template').cloneNode(true);
+                    break;
+                case 'checkbox':
+                    template = document.getElementById('checkbox-template').cloneNode(true);
+                    break;
+                case 'text':
+                    template = document.getElementById('text-template').cloneNode(true);
+                    break;
+                default:
+                    return;
+            }
+            
+            // Set question ID
+            template.dataset.questionId = question.id;
+            
+            // Set question text
+            template.querySelector('.question-text').value = question.text;
+            
+            // For multiple choice and checkbox questions, add options
+            if (question.type === 'multiple_choice' || question.type === 'checkbox') {
+                const optionsContainer = template.querySelector('.options-container');
+                const optionTemplate = document.getElementById('option-template');
+                
+                // Clear any existing options
+                optionsContainer.innerHTML = '';
+                
+                // Add each option
+                question.options.forEach(optionText => {
+                    const option = optionTemplate.cloneNode(true);
+                    option.querySelector('.option-text').value = optionText;
+                    
+                    // Add event listener to remove option button
+                    option.querySelector('.remove-option').addEventListener('click', function() {
+                        option.remove();
+                        updateQuestionsJson();
+                    });
+                    
+                    optionsContainer.appendChild(option);
+                });
+                
+                // Add event listener to add option button
+                template.querySelector('.add-option').addEventListener('click', function() {
+                    const newOption = optionTemplate.cloneNode(true);
+                    
+                    // Add event listener to remove option button
+                    newOption.querySelector('.remove-option').addEventListener('click', function() {
+                        newOption.remove();
+                        updateQuestionsJson();
+                    });
+                    
+                    optionsContainer.appendChild(newOption);
+                });
+            }
+            
+            // Add event listener to remove question button
+            template.querySelector('.remove-question').addEventListener('click', function() {
+                template.remove();
+                updateQuestionsJson();
+                updateSubmitButtonState();
+            });
+            
+            // Add question to container
+            questionsContainer.appendChild(template);
+        }
+    });
+</script>
+{% endblock %}

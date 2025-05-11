@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Survey - Online Survey System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h3 mb-0 text-gray-800">Create New Survey</h1>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Survey Details</h6>
+    </div>
+    <div class="card-body">
+        <form id="create-survey-form" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Survey Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Survey Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="end_date" class="form-label">End Date (Optional)</label>
+                <input type="text" class="form-control" id="end_date" name="end_date" placeholder="Select end date...">
+                <small class="form-text text-muted">If set, the survey will automatically become inactive after this date.</small>
+            </div>
+            
+            <hr class="my-4">
+            
+            <h5 class="mb-3">Survey Questions</h5>
+            
+            <div id="questions-container">
+                <!-- Questions will be added here dynamically -->
+            </div>
+            
+            <div class="mb-3">
+                <button type="button" id="add-multiple-choice" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-plus"></i> Add Multiple Choice
+                </button>
+                <button type="button" id="add-checkbox" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-plus"></i> Add Checkbox
+                </button>
+                <button type="button" id="add-text" class="btn btn-outline-primary">
+                    <i class="fas fa-plus"></i> Add Text Question
+                </button>
+            </div>
+            
+            <input type="hidden" id="questions_json" name="questions_json" value="[]">
+            
+            <div class="text-end mt-4">
+                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" id="submit-button" class="btn btn-primary" disabled>
+                    <i class="fas fa-save"></i> Create Survey
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Question Templates (Hidden) -->
+<div class="d-none">
+    <!-- Multiple Choice Question Template -->
+    <div id="multiple-choice-template" class="question-card">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+            <h6 class="question-type fw-bold">
+                <i class="fas fa-dot-circle text-primary"></i> Multiple Choice Question
+            </h6>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-question">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Question Text</label>
+            <input type="text" class="form-control question-text" placeholder="Enter your question here...">
+        </div>
+        <div class="options-container mb-3">
+            <!-- Options will be added here -->
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary add-option">
+            <i class="fas fa-plus"></i> Add Option
+        </button>
+    </div>
+    
+    <!-- Checkbox Question Template -->
+    <div id="checkbox-template" class="question-card">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+            <h6 class="question-type fw-bold">
+                <i class="fas fa-check-square text-primary"></i> Checkbox Question
+            </h6>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-question">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Question Text</label>
+            <input type="text" class="form-control question-text" placeholder="Enter your question here...">
+        </div>
+        <div class="options-container mb-3">
+            <!-- Options will be added here -->
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary add-option">
+            <i class="fas fa-plus"></i> Add Option
+        </button>
+    </div>
+    
+    <!-- Text Question Template -->
+    <div id="text-template" class="question-card">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+            <h6 class="question-type fw-bold">
+                <i class="fas fa-font text-primary"></i> Text Question
+            </h6>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-question">
+                <i class="fas fa-times"></i> Remove
+            </button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Question Text</label>
+            <input type="text" class="form-control question-text" placeholder="Enter your question here...">
+        </div>
+    </div>
+    
+    <!-- Option Template -->
+    <div id="option-template" class="input-group mb-2 option-input">
+        <input type="text" class="form-control option-text" placeholder="Option text...">
+        <button class="btn btn-outline-danger remove-option" type="button">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ url_for('static', filename='js/survey.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,230 @@
+/* Global Styles */
+:root {
+    --primary-color: #4e73df;
+    --secondary-color: #f8f9fc;
+    --accent-color: #36b9cc;
+    --success-color: #1cc88a;
+    --warning-color: #f6c23e;
+    --danger-color: #e74a3b;
+    --dark-color: #5a5c69;
+    --light-color: #f8f9fc;
+}
+
+body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Header & Navigation */
+.navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.navbar-dark .navbar-brand {
+    color: white;
+}
+
+.nav-link {
+    font-weight: 600;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid #e3e6f0;
+    font-weight: 700;
+    padding: 1rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-footer {
+    background-color: white;
+    border-top: 1px solid #e3e6f0;
+    padding: 0.75rem 1.25rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #2653d4;
+    border-color: #244ec9;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+/* Forms */
+.form-control {
+    border-radius: 0.35rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+/* Survey specific styles */
+.survey-item {
+    position: relative;
+    padding: 1rem;
+    border-radius: 0.35rem;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+.survey-question {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.survey-option {
+    margin-bottom: 0.5rem;
+}
+
+.question-card {
+    border: 1px solid #e3e6f0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+.question-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Homepage */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #224abe 100%);
+    color: white;
+    padding: 5rem 0;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Dashboard */
+.survey-status {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-active {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-inactive {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* Survey Creation */
+.add-question-btn {
+    margin-bottom: 1.5rem;
+}
+
+/* Survey Results */
+.result-section {
+    margin-bottom: 2rem;
+}
+
+.result-chart {
+    height: 300px;
+    margin-bottom: 1rem;
+}
+
+.text-response {
+    background-color: #f8f9fc;
+    border-radius: 0.35rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .feature-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Footer */
+.footer {
+    margin-top: auto;
+    background-color: #f8f9fc;
+    border-top: 1px solid #e3e6f0;
+    padding: 1rem 0;
+}

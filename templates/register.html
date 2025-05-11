@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Online Survey System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+            <div class="card-header">
+                <h3 class="text-center font-weight-light my-2">Create Account</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('auth.register') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div>
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 mb-0">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <div class="small">
+                    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

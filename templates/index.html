@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Online Survey System - Home{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Welcome to Online Survey System</h1>
+        <p class="lead mb-5">Create, share, and analyze surveys with ease. Get valuable insights from your audience.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-light btn-lg px-4 me-md-2">Go to Dashboard</a>
+            {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg px-4">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row text-center mb-5">
+        <div class="col-12">
+            <h2 class="fw-bold mb-4">Why Choose Our Survey System?</h2>
+            <p class="lead text-muted">Powerful features to help you collect and analyze feedback efficiently</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="feature-card card h-100">
+                <div class="card-body">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h4 class="card-title">Easy to Create</h4>
+                    <p class="card-text">Admins can quickly create custom surveys with various question types including multiple-choice, checkboxes, and text responses.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="feature-card card h-100">
+                <div class="card-body">
+                    <div class="feature-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h4 class="card-title">Simple to Use</h4>
+                    <p class="card-text">Users can easily participate in surveys with a clean and intuitive interface designed for the best experience.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="feature-card card h-100">
+                <div class="card-body">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4 class="card-title">Powerful Analytics</h4>
+                    <p class="card-text">Get detailed insights and visualization of survey results to help you make informed decisions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4 mb-5">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Start Creating Surveys</a>
+    </div>
+</div>
+{% endblock %}
