@@ -1,14 +1,27 @@
 {% extends 'base.html' %}
 
-{% block title %}500 Server Error{% endblock %}
+{% block title %}500 Server Error - SurveyPulse{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-    <h1 class="display-1 fw-bold text-danger">500</h1>
-    <p class="fs-3">Server Error</p>
-    <p class="lead">Something went wrong. Please try again later.</p>
-    <div class="mt-4">
-        <a href="{{ url_for('index') }}" class="btn btn-primary">Go Home</a>
+<div class="container">
+    <div class="row justify-content-center py-5">
+        <div class="col-md-8 text-center">
+            <div class="mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-danger opacity-50">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h1 class="display-1 fw-bold text-danger">500</h1>
+            <p class="fs-3 fw-light">Server Error</p>
+            <p class="lead text-muted">Something went wrong on our servers. Please try again later.</p>
+            <div class="mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-danger px-4 py-2">
+                    <i class="fas fa-home me-2"></i>Go Home
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

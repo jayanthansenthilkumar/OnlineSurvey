@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 
-{% block title %}Online Survey System - Home{% endblock %}
+{% block title %}SurveyPulse - Modern Survey Platform{% endblock %}
 
 {% block content %}
 <div class="hero-section text-center">
     <div class="container">
-        <h1 class="display-4 fw-bold mb-4">Welcome to Online Survey System</h1>
-        <p class="lead mb-5">Create, share, and analyze surveys with ease. Get valuable insights from your audience.</p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <h1 class="display-4 fw-bold mb-4">Create Surveys That Get Results</h1>
+        <p class="lead mb-5">SurveyPulse helps you create beautiful surveys, collect valuable feedback, and make data-driven decisions.</p>
+        <div class="d-grid gap-3 d-md-flex justify-content-md-center">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-light btn-lg px-4 me-md-2">Go to Dashboard</a>
+                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-light btn-lg px-5">
+                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                </a>
             {% else %}
-                <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
-                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg px-4">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-5">
+                    <i class="fas fa-rocket me-2"></i>Get Started Free
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg px-5">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
             {% endif %}
         </div>
     </div>
@@ -20,52 +26,117 @@
 
 <div class="container">
     <div class="row text-center mb-5">
-        <div class="col-12">
-            <h2 class="fw-bold mb-4">Why Choose Our Survey System?</h2>
-            <p class="lead text-muted">Powerful features to help you collect and analyze feedback efficiently</p>
+        <div class="col-lg-8 mx-auto">
+            <h2 class="fw-bold mb-3">Why Choose SurveyPulse?</h2>
+            <p class="lead text-muted">Our platform is designed to make survey creation and analysis as simple as possible while providing powerful features.</p>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="feature-card card h-100">
-                <div class="card-body">
-                    <div class="feature-icon">
-                        <i class="fas fa-magic"></i>
-                    </div>
-                    <h4 class="card-title">Easy to Create</h4>
-                    <p class="card-text">Admins can quickly create custom surveys with various question types including multiple-choice, checkboxes, and text responses.</p>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-wand-magic-sparkles"></i>
                 </div>
+                <h4>Intuitive Design</h4>
+                <p>Our drag-and-drop interface makes it easy to create professional surveys in minutes, no technical skills required.</p>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="feature-card card h-100">
-                <div class="card-body">
-                    <div class="feature-icon">
-                        <i class="fas fa-share-alt"></i>
-                    </div>
-                    <h4 class="card-title">Simple to Use</h4>
-                    <p class="card-text">Users can easily participate in surveys with a clean and intuitive interface designed for the best experience.</p>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-column"></i>
                 </div>
+                <h4>Insightful Analytics</h4>
+                <p>Transform responses into actionable insights with our powerful analytics and visualization tools.</p>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="feature-card card h-100">
-                <div class="card-body">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <h4 class="card-title">Powerful Analytics</h4>
-                    <p class="card-text">Get detailed insights and visualization of survey results to help you make informed decisions.</p>
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-halved"></i>
                 </div>
+                <h4>Secure & Reliable</h4>
+                <p>Your data is protected with enterprise-grade security, ensuring respondent privacy and compliance.</p>
             </div>
         </div>
     </div>
 
-    <div class="text-center mt-4 mb-5">
-        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Start Creating Surveys</a>
+    <div class="row mt-5 pt-3">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+                <div class="card-body p-5">
+                    <h3 class="card-title fw-bold mb-4">For Survey Creators</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Create unlimited surveys with multiple question types</div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Customize your surveys with your own branding</div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Analyze responses with real-time reports and visualizations</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Export data in multiple formats for further analysis</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+                <div class="card-body p-5">
+                    <h3 class="card-title fw-bold mb-4">For Respondents</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Easy-to-use interface for completing surveys</div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Mobile-friendly design for taking surveys on any device</div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Privacy-focused with anonymous response options</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-check-circle fa-lg"></i></div>
+                                <div>Track your survey participation history</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5 pt-3 mb-5">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-5 py-3 fw-semibold">
+            Start Creating Surveys <i class="fas fa-arrow-right ms-2"></i>
+        </a>
     </div>
 </div>
 {% endblock %}

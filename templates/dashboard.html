@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard - Online Survey System{% endblock %}
+{% block title %}Dashboard - SurveyPulse{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-0">Your Dashboard</h1>
+        <p class="text-muted mb-0">Manage your surveys and responses</p>
     </div>
-    <div class="col-md-4 text-end">
+    <div>
         {% if current_user.is_admin %}
             <a href="{{ url_for('survey.create_survey') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Create New Survey
+                <i class="fas fa-plus-circle me-2"></i> Create New Survey
             </a>
         {% endif %}
     </div>
@@ -20,52 +21,117 @@
     {% if current_user.is_admin %}
         <!-- Admin Dashboard -->
         <div class="col-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Your Surveys</h6>
+            <!-- Overview Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-left-primary h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-primary fw-bold">Total Surveys</h6>
+                                    <h2 class="mt-2 mb-0 fw-bold">{{ surveys|length if surveys else 0 }}</h2>
+                                </div>
+                                <div class="text-primary">
+                                    <i class="fas fa-clipboard-list fa-3x opacity-25"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="col-md-4">
+                    <div class="card border-left-success h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-success fw-bold">Active Surveys</h6>
+                                    <h2 class="mt-2 mb-0 fw-bold">
+                                        {% set active_count = 0 %}
+                                        {% for survey in surveys if survey.is_active %}
+                                            {% set active_count = active_count + 1 %}
+                                        {% endfor %}
+                                        {{ active_count }}
+                                    </h2>
+                                </div>
+                                <div class="text-success">
+                                    <i class="fas fa-chart-line fa-3x opacity-25"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-left-info h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-info fw-bold">Total Responses</h6>
+                                    <h2 class="mt-2 mb-0 fw-bold">--</h2>
+                                </div>
+                                <div class="text-info">
+                                    <i class="fas fa-users fa-3x opacity-25"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="mb-0 fw-bold">Your Surveys</h5>
+                    <div>
+                        <a href="{{ url_for('survey.create_survey') }}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus-circle me-1"></i> New Survey
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
                     {% if surveys and surveys|length > 0 %}
                         <div class="table-responsive">
-                            <table class="table table-bordered" width="100%" cellspacing="0">
+                            <table class="table table-hover" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Title</th>
+                                        <th class="ps-4">Title</th>
                                         <th>Created</th>
                                         <th>Status</th>
                                         <th>End Date</th>
                                         <th>Responses</th>
-                                        <th>Actions</th>
+                                        <th class="text-end pe-4">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for survey in surveys %}
                                         <tr>
-                                            <td>{{ survey.title }}</td>
-                                            <td>{{ survey.created_at.strftime('%Y-%m-%d') }}</td>
+                                            <td class="ps-4 fw-medium">{{ survey.title }}</td>
+                                            <td>{{ survey.created_at.strftime('%b %d, %Y') }}</td>
                                             <td>
                                                 {% if survey.is_active %}
-                                                    <span class="badge bg-success">Active</span>
+                                                    <span class="badge bg-success rounded-pill">Active</span>
                                                 {% else %}
-                                                    <span class="badge bg-danger">Inactive</span>
-                                                {% endif %}
-                                            </td>
+                                                    <span class="badge bg-danger rounded-pill">Inactive</span>
+                                                {% endif %}                                            </td>
                                             <td>
                                                 {% if survey.end_date %}
-                                                    {{ survey.end_date.strftime('%Y-%m-%d') }}
+                                                    {{ survey.end_date.strftime('%b %d, %Y') }}
                                                 {% else %}
-                                                    No end date
+                                                    <span class="text-muted">No end date</span>
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                <a href="{{ url_for('survey.survey_results', survey_id=survey._id) }}" class="btn btn-sm btn-info">
-                                                    <i class="fas fa-chart-bar"></i> View Results
+                                                <a href="{{ url_for('survey.survey_results', survey_id=survey._id) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-chart-bar me-1"></i> Results
                                                 </a>
                                             </td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <a href="{{ url_for('survey.edit_survey', survey_id=survey._id) }}" class="btn btn-sm btn-primary">
-                                                        <i class="fas fa-edit"></i> Edit
+                                            <td class="text-end pe-4">
+                                                <div class="table-action-buttons">
+                                                    <a href="{{ url_for('survey.edit_survey', survey_id=survey._id) }}" class="btn btn-sm btn-primary" title="Edit Survey">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="{{ url_for('survey.survey_results', survey_id=survey._id) }}" class="btn btn-sm btn-info text-white" title="View Results">
+                                                        <i class="fas fa-chart-pie"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm btn-danger" title="Delete Survey">
+                                                        <i class="fas fa-trash-alt"></i>
                                                     </a>
                                                 </div>
                                             </td>
@@ -76,39 +142,60 @@
                         </div>
                     {% else %}
                         <div class="text-center py-5">
-                            <i class="fas fa-clipboard-list fa-4x mb-3 text-gray-300"></i>
-                            <p>You haven't created any surveys yet.</p>
+                            <div class="mb-3">
+                                <i class="fas fa-clipboard-list fa-4x text-light"></i>
+                            </div>
+                            <h5 class="mb-3">You haven't created any surveys yet</h5>
+                            <p class="text-muted mb-4">Get started by creating your first survey</p>
                             <a href="{{ url_for('survey.create_survey') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Create Your First Survey
+                                <i class="fas fa-plus-circle me-2"></i> Create Your First Survey
                             </a>
                         </div>
                     {% endif %}
                 </div>
             </div>
-        </div>
-    {% else %}
+        </div>    {% else %}
         <!-- User Dashboard -->
         <div class="col-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Available Surveys</h6>
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-star text-warning me-2"></i>Available Surveys
+                    </h5>
                 </div>
                 <div class="card-body">
                     {% if surveys_to_take and surveys_to_take|length > 0 %}
-                        <div class="row">
+                        <div class="row g-4">
                             {% for survey in surveys_to_take %}
-                                <div class="col-md-6 col-lg-4 mb-4">
-                                    <div class="card h-100">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card h-100 border-0 shadow-sm hover-card">
                                         <div class="card-body">
-                                            <h5 class="card-title">{{ survey.title }}</h5>
-                                            <p class="card-text">{{ survey.description }}</p>
-                                            {% if survey.end_date %}
-                                                <p class="small text-muted">Ends: {{ survey.end_date.strftime('%Y-%m-%d') }}</p>
-                                            {% endif %}
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <span class="badge bg-primary rounded-pill px-3 py-2">New</span>
+                                                {% if survey.end_date %}
+                                                    <small class="text-muted">
+                                                        <i class="far fa-calendar-alt me-1"></i>Ends: {{ survey.end_date.strftime('%b %d, %Y') }}
+                                                    </small>
+                                                {% endif %}
+                                            </div>
+                                            <h5 class="card-title fw-bold">{{ survey.title }}</h5>
+                                            <p class="card-text text-muted">{{ survey.description }}</p>
+                                            
+                                            <div class="d-flex align-items-center mt-3">
+                                                <div class="me-3">
+                                                    <div class="bg-light rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="fas fa-question text-primary"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted d-block">Estimated time</small>
+                                                    <span class="fw-medium">5-10 minutes</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="card-footer">
-                                            <a href="{{ url_for('survey.take_survey', survey_id=survey._id) }}" class="btn btn-primary btn-sm">
-                                                <i class="fas fa-poll"></i> Take Survey
+                                        <div class="card-footer bg-white border-top-0 d-grid">
+                                            <a href="{{ url_for('survey.take_survey', survey_id=survey._id) }}" class="btn btn-primary">
+                                                <i class="fas fa-poll me-2"></i> Take Survey
                                             </a>
                                         </div>
                                     </div>
@@ -117,27 +204,42 @@
                         </div>
                     {% else %}
                         <div class="text-center py-5">
-                            <i class="fas fa-check-circle fa-4x mb-3 text-gray-300"></i>
-                            <p>No surveys available right now. Check back later!</p>
+                            <div class="mb-3">
+                                <i class="fas fa-clipboard-check fa-4x text-light"></i>
+                            </div>
+                            <h5 class="mb-3">No surveys available right now</h5>
+                            <p class="text-muted">Check back later for new surveys to participate in!</p>
                         </div>
                     {% endif %}
                 </div>
             </div>
 
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Completed Surveys</h6>
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-check-circle text-success me-2"></i>Your Survey History
+                    </h5>
                 </div>
                 <div class="card-body">
                     {% if responded_surveys and responded_surveys|length > 0 %}
-                        <div class="row">
+                        <div class="row g-4">
                             {% for survey in responded_surveys %}
-                                <div class="col-md-6 col-lg-4 mb-4">
-                                    <div class="card h-100">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card h-100 border-0 shadow-sm">
                                         <div class="card-body">
-                                            <div class="status-badge completed">Completed</div>
-                                            <h5 class="card-title">{{ survey.title }}</h5>
-                                            <p class="card-text">{{ survey.description }}</p>
+                                            <span class="badge bg-success rounded-pill px-3 py-2 mb-3">Completed</span>
+                                            <h5 class="card-title fw-bold">{{ survey.title }}</h5>
+                                            <p class="card-text text-muted">{{ survey.description }}</p>
+                                            
+                                            <div class="d-flex align-items-center mt-3">
+                                                <div class="me-2">
+                                                    <i class="far fa-calendar-check text-success"></i>
+                                                </div>
+                                                <div>
+                                                    <small class="text-muted">Completed on</small>
+                                                    <span class="ms-2">{{ survey.created_at.strftime('%b %d, %Y') if survey.created_at else 'Unknown' }}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -145,8 +247,11 @@
                         </div>
                     {% else %}
                         <div class="text-center py-5">
-                            <i class="fas fa-clipboard-list fa-4x mb-3 text-gray-300"></i>
-                            <p>You haven't completed any surveys yet.</p>
+                            <div class="mb-3">
+                                <i class="fas fa-history fa-4x text-light"></i>
+                            </div>
+                            <h5 class="mb-3">You haven't completed any surveys yet</h5>
+                            <p class="text-muted">Your completed surveys will appear here</p>
                         </div>
                     {% endif %}
                 </div>
@@ -154,4 +259,24 @@
         </div>
     {% endif %}
 </div>
+
+<!-- Custom CSS for dashboard cards -->
+<style>
+.border-left-primary {
+    border-left: 4px solid var(--primary-color);
+}
+.border-left-success {
+    border-left: 4px solid var(--success-color);
+}
+.border-left-info {
+    border-left: 4px solid var(--accent-color);
+}
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+</style>
 {% endblock %}

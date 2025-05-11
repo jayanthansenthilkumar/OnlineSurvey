@@ -1,64 +1,147 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ survey.title }} - Online Survey System{% endblock %}
+{% block title %}{{ survey.title }} - SurveyPulse{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <h1 class="h3 mb-0 text-gray-800">{{ survey.title }}</h1>
-        <p class="mt-2 text-muted">{{ survey.description }}</p>
-    </div>
-</div>
-
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Survey Questions</h6>
-    </div>
-    <div class="card-body">
-        <form id="take-survey-form" method="POST" action="{{ url_for('survey.take_survey', survey_id=survey._id) }}">
-            {% for question in survey.questions %}
-                <div class="survey-item mb-4">
-                    <div class="survey-question">
-                        <strong>{{ loop.index }}. {{ question.text }}</strong>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-header bg-primary text-white p-4 rounded-top-4">
+                <h2 class="mb-2 fw-bold">{{ survey.title }}</h2>
+                <p class="mb-0 opacity-75">{{ survey.description }}</p>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-light border-start border-4 border-primary mb-4">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="fas fa-info-circle fa-lg text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">Please answer all questions with an asterisk (*) as they are required. Your responses are valuable to us!</p>
+                        </div>
+                    </div>
+                </div>                <form id="take-survey-form" method="POST" action="{{ url_for('survey.take_survey', survey_id=survey._id) }}">
+                    <div class="progress mb-4" style="height: 8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="surveyProgress"></div>
                     </div>
                     
-                    {% if question.type == 'multiple_choice' %}
-                        <div class="survey-options">
-                            {% for option in question.options %}
-                                <div class="form-check survey-option">
-                                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="option_{{ question.id }}_{{ loop.index }}" value="{{ option }}" required>
-                                    <label class="form-check-label" for="option_{{ question.id }}_{{ loop.index }}">
-                                        {{ option }}
-                                    </label>
+                    {% for question in survey.questions %}
+                        <div class="survey-item p-4 mb-4 bg-light rounded-4">
+                            <div class="d-flex align-items-start mb-3">
+                                <div class="question-number me-3">
+                                    <span class="badge bg-primary rounded-circle p-2">{{ loop.index }}</span>
                                 </div>
-                            {% endfor %}
-                        </div>
-                    {% elif question.type == 'checkbox' %}
-                        <div class="survey-options">
-                            {% for option in question.options %}
-                                <div class="form-check survey-option">
-                                    <input class="form-check-input" type="checkbox" name="question_{{ question.id }}" id="option_{{ question.id }}_{{ loop.index }}" value="{{ option }}">
-                                    <label class="form-check-label" for="option_{{ question.id }}_{{ loop.index }}">
-                                        {{ option }}
-                                    </label>
+                                <div class="survey-question flex-grow-1">
+                                    <h5 class="mb-0 fw-bold">{{ question.text }}</h5>
+                                    <small class="text-muted">{{ question.type|replace('_', ' ')|title }}</small>
                                 </div>
-                            {% endfor %}
+                            </div>
+                            
+                            {% if question.type == 'multiple_choice' %}
+                                <div class="survey-options ms-5">
+                                    {% for option in question.options %}
+                                        <div class="form-check survey-option mb-3">
+                                            <input class="form-check-input survey-input" type="radio" name="question_{{ question.id }}" id="option_{{ question.id }}_{{ loop.index }}" value="{{ option }}" required>
+                                            <label class="form-check-label" for="option_{{ question.id }}_{{ loop.index }}">
+                                                {{ option }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>                            {% elif question.type == 'checkbox' %}
+                                <div class="survey-options ms-5">
+                                    {% for option in question.options %}
+                                        <div class="form-check survey-option mb-3">
+                                            <input class="form-check-input survey-input" type="checkbox" name="question_{{ question.id }}[]" id="option_{{ question.id }}_{{ loop.index }}" value="{{ option }}">
+                                            <label class="form-check-label" for="option_{{ question.id }}_{{ loop.index }}">
+                                                {{ option }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% elif question.type == 'text' %}
+                                <div class="form-group ms-5">
+                                    <textarea class="form-control survey-input" name="question_{{ question.id }}" rows="4" placeholder="Type your answer here..." required></textarea>
+                                </div>
+                            {% endif %}
                         </div>
-                    {% elif question.type == 'text' %}
-                        <div class="form-group">
-                            <textarea class="form-control" name="question_{{ question.id }}" rows="3" required></textarea>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            
-            <div class="text-end mt-4">
-                <a href="{{ url_for('survey.dashboard') }}" class="btn btn-secondary me-2">Cancel</a>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Submit Survey
-                </button>
+                    {% endfor %}
+                    
+                    <div class="d-flex justify-content-between mt-5">
+                        <a href="{{ url_for('survey.dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Return to Dashboard
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4 py-2">
+                            <i class="fas fa-paper-plane me-2"></i> Submit Responses
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
+        </div>
+        
+        <div class="text-center text-muted small mt-3">
+            <p>Thank you for participating in this survey. Your feedback is valuable to us.</p>
+        </div>    </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Progress bar functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.survey-input');
+        const progressBar = document.getElementById('surveyProgress');
+        const totalQuestions = {{ survey.questions|length }};
+          function updateProgress() {
+            let completed = 0;
+            const radioGroups = {};
+            const checkboxGroups = {};
+            
+            inputs.forEach(input => {
+                if (input.type === 'radio') {
+                    const name = input.name;
+                    if (!radioGroups[name]) {
+                        radioGroups[name] = false;
+                    }
+                    if (input.checked) {
+                        radioGroups[name] = true;
+                    }
+                } else if (input.type === 'checkbox') {
+                    const name = input.name.replace('[]', '');
+                    if (!checkboxGroups[name]) {
+                        checkboxGroups[name] = false;
+                    }
+                    if (input.checked) {
+                        checkboxGroups[name] = true;
+                    }
+                } else if (input.type === 'textarea' && input.value.trim() !== '') {
+                    completed++;
+                }
+            });
+            
+            // Count radio groups that have a selection
+            Object.values(radioGroups).forEach(isChecked => {
+                if (isChecked) completed++;
+            });
+            
+            // Count checkbox groups that have at least one selection
+            Object.values(checkboxGroups).forEach(isChecked => {
+                if (isChecked) completed++;
+            });
+            
+            const percentage = Math.min(Math.round((completed / totalQuestions) * 100), 100);
+            progressBar.style.width = percentage + '%';
+            progressBar.setAttribute('aria-valuenow', percentage);
+        }
+        
+        inputs.forEach(input => {
+            input.addEventListener('change', updateProgress);
+            if (input.type === 'textarea') {
+                input.addEventListener('input', updateProgress);
+            }
+        });
+        
+        // Initial update
+        updateProgress();
+    });
+</script>
 {% endblock %}

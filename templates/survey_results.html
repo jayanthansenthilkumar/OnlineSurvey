@@ -1,76 +1,77 @@
 {% extends 'base.html' %}
 
-{% block title %}Survey Results - {{ survey.title }}{% endblock %}
+{% block title %}Survey Results - {{ survey.title }} - SurveyPulse{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
 {% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h1 class="h3 mb-0 text-gray-800">Results: {{ survey.title }}</h1>
-        <p class="mt-2 text-muted">{{ survey.description }}</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-0">Results: {{ survey.title }}</h1>
+        <p class="text-muted mb-0">{{ survey.description }}</p>
     </div>
-    <div class="col-md-4 text-end">
-        <a href="{{ url_for('survey.dashboard') }}" class="btn btn-primary">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
+    <div>
+        <a href="{{ url_for('survey.dashboard') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
         </a>
     </div>
 </div>
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Survey Statistics</h6>
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+            <i class="fas fa-chart-bar text-primary me-2"></i>Survey Statistics
+        </h5>
     </div>
-    <div class="card-body">
+    <div class="card-body p-4">
         <div class="row">
             <div class="col-md-4 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card border-start border-primary border-4 shadow-sm h-100 py-2 rounded-3">
                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Responses</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_responses }}</div>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="text-uppercase fw-bold text-primary mb-1 small">Total Responses</div>
+                                <div class="h3 mb-0 fw-bold">{{ total_responses }}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                                <i class="fas fa-users fa-2x text-primary opacity-25"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
+                <div class="card border-start border-success border-4 shadow-sm h-100 py-2 rounded-3">
                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Status</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="text-uppercase fw-bold text-success mb-1 small">Status</div>
+                                <div class="h3 mb-0 fw-bold">
                                     {% if survey.is_active %}
                                         <span class="badge bg-success">Active</span>
                                     {% else %}
                                         <span class="badge bg-danger">Inactive</span>
-                                    {% endif %}
-                                </div>
+                                    {% endif %}                                </div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
+                                <i class="fas fa-clipboard-check fa-2x text-success opacity-25"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
+                <div class="card border-start border-info border-4 shadow-sm h-100 py-2 rounded-3">
                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Created</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ survey.created_at.strftime('%Y-%m-%d') }}</div>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="text-uppercase fw-bold text-info mb-1 small">Created</div>
+                                <div class="h3 mb-0 fw-bold">{{ survey.created_at.strftime('%Y-%m-%d') }}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                <i class="fas fa-calendar fa-2x text-info opacity-25"></i>
                             </div>
                         </div>
                     </div>
@@ -81,9 +82,9 @@
 </div>
 
 {% for question_id, result in results.items() %}
-    <div class="card shadow mb-4 result-section">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">{{ loop.index }}. {{ result.text }}</h6>
+    <div class="card border-0 shadow-sm rounded-4 mb-4 result-section">
+        <div class="card-header bg-white py-3 border-bottom">
+            <h5 class="fw-bold mb-1">{{ loop.index }}. {{ result.text }}</h5>
             <small class="text-muted">
                 {% if result.type == 'multiple_choice' %}Multiple Choice Question
                 {% elif result.type == 'checkbox' %}Checkbox Question
@@ -91,9 +92,9 @@
                 {% endif %}
             </small>
         </div>
-        <div class="card-body">
+        <div class="card-body p-4">
             {% if result.type in ['multiple_choice', 'checkbox'] %}
-                <div class="result-chart">
+                <div class="result-chart mb-4">
                     <canvas id="chart-{{ question_id }}" width="400" height="200"></canvas>
                 </div>
                 <div class="table-responsive">
@@ -123,13 +124,15 @@
                     </table>
                 </div>
             {% else %}
-                <h6 class="mb-3">Text Responses</h6>
+                <h5 class="mb-3 fw-bold">Text Responses</h5>
                 {% if result.answers|length > 0 %}
                     {% for answer in result.answers %}
-                        <div class="text-response">{{ answer }}</div>
+                        <div class="p-3 bg-light rounded-3 mb-2 text-response">{{ answer }}</div>
                     {% endfor %}
                 {% else %}
-                    <p>No responses yet.</p>
+                    <div class="alert alert-light border-start border-4 border-warning">
+                        <i class="fas fa-info-circle me-2 text-warning"></i>No responses yet.
+                    </div>
                 {% endif %}
             {% endif %}
         </div>
@@ -140,7 +143,6 @@
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 <script>
-    
     document.addEventListener('DOMContentLoaded', function() {
         {% for question_id, result in results.items() %}
             {% if result.type in ['multiple_choice', 'checkbox'] %}
@@ -158,23 +160,36 @@
                             {% for option in result.options %}
                                 {{ result.counts[option] }},
                             {% endfor %}
-                        ],
-                        backgroundColor: [
-                            'rgba(78, 115, 223, 0.7)',
-                            'rgba(54, 185, 204, 0.7)',
-                            'rgba(28, 200, 138, 0.7)',
-                            'rgba(246, 194, 62, 0.7)',
-                            'rgba(231, 74, 59, 0.7)',
-                            'rgba(133, 135, 150, 0.7)',
-                        ],
-                        borderColor: [
-                            'rgba(78, 115, 223, 1)',
-                            'rgba(54, 185, 204, 1)',
-                            'rgba(28, 200, 138, 1)',
-                            'rgba(246, 194, 62, 1)',
-                            'rgba(231, 74, 59, 1)',
-                            'rgba(133, 135, 150, 1)',
-                        ],
+                        ],                        backgroundColor: function(context) {
+                            const colors = [
+                                'rgba(78, 115, 223, 0.7)',
+                                'rgba(54, 185, 204, 0.7)',
+                                'rgba(28, 200, 138, 0.7)',
+                                'rgba(246, 194, 62, 0.7)',
+                                'rgba(231, 74, 59, 0.7)',
+                                'rgba(133, 135, 150, 0.7)',
+                                'rgba(95, 158, 160, 0.7)',
+                                'rgba(238, 130, 238, 0.7)',
+                                'rgba(106, 90, 205, 0.7)',
+                                'rgba(250, 128, 114, 0.7)'
+                            ];
+                            return colors[context.dataIndex % colors.length];
+                        },
+                        borderColor: function(context) {
+                            const colors = [
+                                'rgba(78, 115, 223, 1)',
+                                'rgba(54, 185, 204, 1)',
+                                'rgba(28, 200, 138, 1)',
+                                'rgba(246, 194, 62, 1)',
+                                'rgba(231, 74, 59, 1)',
+                                'rgba(133, 135, 150, 1)',
+                                'rgba(95, 158, 160, 1)',
+                                'rgba(238, 130, 238, 1)',
+                                'rgba(106, 90, 205, 1)',
+                                'rgba(250, 128, 114, 1)'
+                            ];
+                            return colors[context.dataIndex % colors.length];
+                        },
                         borderWidth: 1
                     }]
                 };
@@ -190,12 +205,51 @@
                         plugins: {
                             legend: {
                                 position: chartType === 'pie' ? 'right' : 'top',
+                                labels: {
+                                    font: {
+                                        family: "'Poppins', sans-serif",
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: 12,
+                                titleFont: {
+                                    family: "'Poppins', sans-serif",
+                                    size: 14
+                                },
+                                bodyFont: {
+                                    family: "'Poppins', sans-serif"
+                                },
+                                displayColors: true,
+                                borderWidth: 0
                             }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                display: chartType === 'bar'
+                                display: chartType === 'bar',
+                                grid: {
+                                    drawBorder: false,
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                ticks: {
+                                    font: {
+                                        family: "'Poppins', sans-serif"
+                                    }
+                                }
+                            },
+                            x: {
+                                display: chartType === 'bar',
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    font: {
+                                        family: "'Poppins', sans-serif"
+                                    }
+                                }
                             }
                         }
                     }
