@@ -1,0 +1,161 @@
+[{
+  "_id": {
+    "$oid": "682424becd8700633b04d954"
+  },
+  "title": "CIA 1 Survey",
+  "description": "Please Make Your CIA 1 Survey Here",
+  "created_by": "6824238dcd8700633b04d953",
+  "questions": [
+    {
+      "id": "qf26gb9ife",
+      "text": "The instructions provided for CIA 1 were clear and easy to understand.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qn5ovsj0m0",
+      "text": "The questions reflected the topics covered in class.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qc5jqp3fce",
+      "text": "The test format (MCQs, short/long answers) was appropriate for the subject.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qd33vkh7mf",
+      "text": "The level of difficulty of the CIA 1 was:",
+      "type": "multiple_choice",
+      "options": [
+        "Very Easy",
+        "Easy",
+        "Difficult",
+        "Moderate"
+      ]
+    },
+    {
+      "id": "qg30cne1hh",
+      "text": "Were you able to complete the test within the given time?",
+      "type": "multiple_choice",
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "id": "q5h697zrrc",
+      "text": "Did the test assess both theoretical and practical knowledge effectively?",
+      "type": "multiple_choice",
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "id": "qzw6jjwfm2",
+      "text": "The evaluation of CIA 1 was fair and unbiased.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qw595n0rod",
+      "text": "What improvements would you suggest for future CIAs?",
+      "type": "text"
+    }
+  ],
+  "is_active": true,
+  "created_at": {
+    "$date": "2025-05-14T05:06:06.727Z"
+  },
+  "end_date": null
+},
+{
+  "_id": {
+    "$oid": "682425accd8700633b04d955"
+  },
+  "title": "CIA 2 Survey",
+  "description": "Kindly make your survey in this Website",
+  "created_by": "6824238dcd8700633b04d953",
+  "questions": [
+    {
+      "id": "qrlxijpk1l",
+      "text": "The CIA 2 covered more advanced topics compared to CIA 1.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qzy20gjp1u",
+      "text": "The test helped me understand my progress since CIA 1.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qdsfapiad7",
+      "text": "The topics tested in CIA 2 were discussed thoroughly in class.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qblunjp6i8",
+      "text": "Compared to CIA 1, CIA 2 was:",
+      "type": "multiple_choice",
+      "options": [
+        "Very Easy",
+        "Easy",
+        "Difficult",
+        "Neither/Nor"
+      ]
+    },
+    {
+      "id": "q02ay7fdq6",
+      "text": "Did you have enough time to complete the CIA 2 paper?",
+      "type": "multiple_choice",
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "id": "qj7p8ulkzj",
+      "text": "The evaluation criteria for CIA 2 were transparent and clearly explained.",
+      "type": "multiple_choice",
+      "options": [
+        "Agree",
+        "Disagree"
+      ]
+    },
+    {
+      "id": "qypxydjcs4",
+      "text": "What suggestions do you have for improving future CIA tests?",
+      "type": "text"
+    }
+  ],
+  "is_active": true,
+  "created_at": {
+    "$date": "2025-05-14T05:10:04.284Z"
+  },
+  "end_date": null
+}]

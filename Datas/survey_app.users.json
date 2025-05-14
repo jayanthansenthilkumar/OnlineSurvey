@@ -1,0 +1,36 @@
+[{
+  "_id": {
+    "$oid": "6824238dcd8700633b04d953"
+  },
+  "username": "sonali",
+  "email": "sonali@prisoltech.com",
+  "password_hash": "pbkdf2:sha256:260000$TznObvpzqb9qNgen$f76d1751724724e3a94b61279378223217d01eb5ddaf5e827f9d2ccfc5c65677",
+  "is_admin": true,
+  "created_at": {
+    "$date": "2025-05-14T05:01:01.048Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6824263acd8700633b04d956"
+  },
+  "username": "prithika",
+  "email": "prithika@prisoltech.com",
+  "password_hash": "pbkdf2:sha256:260000$qaK5Gr8A4KtN56mw$36ef5ac3bca3f2fa981d27e39c603ce8b78fac5edeb99b9e54f7009e7568e6d0",
+  "is_admin": false,
+  "created_at": {
+    "$date": "2025-05-14T05:12:26.119Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "682426cdcd8700633b04d958"
+  },
+  "username": "jayanthan",
+  "email": "jayanthan@prisoltech.com",
+  "password_hash": "pbkdf2:sha256:260000$M426s6FyoQZEAYKp$01f760505db1879a643fa417221e1f58ea96724a613982bf5dff628a2d21282e",
+  "is_admin": false,
+  "created_at": {
+    "$date": "2025-05-14T05:14:53.131Z"
+  }
+}]
